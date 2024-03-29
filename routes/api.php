@@ -21,17 +21,17 @@ use App\Http\Controllers\UserAuthController;
 
 Route::group(['middleware'=> ['auth:sanctum']],function(){
   Route::post('/itineraries/{itinerary}/destinations', [DestinationController::class, 'addDestinations']);
-
+  Route::get('/users/me/itineraries/{itinerary}', [ItineraryController::class, 'addToItinerariesToVisit']);
+  
   Route::post('/itineraries', [ItineraryController::class, 'store']);
+  Route::get('/itineraries',[ItineraryController::class, 'index']);
 
-    Route::get('/itineraries',[ItineraryController::class, 'index']);
-
+ 
     Route::get('/itineraries/{itinerary}/edit', [ItineraryController::class, 'edit']);
     Route::put('/itineraries/{itinerary}', [ItineraryController::class, 'update']);
 });
 
-Route::get('/users/me/itineraries/{itinerary}', [ItineraryController::class, 'addToItinerariesToVisit']);
-  
+
 Route::get('/itineraries/search', [ItineraryController::class, 'search']);
    
 Route::post('register',[UserAuthController::class,'register']);

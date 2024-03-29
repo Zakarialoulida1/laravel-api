@@ -11,6 +11,8 @@ class DestinationController extends Controller
     public function addDestinations(Request $request, Itinerary $itinerary)
     {
 
+
+
         // Validate request data
         $request->validate([
             'destinations' => 'required|array',

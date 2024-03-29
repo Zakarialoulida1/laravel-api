@@ -1,6 +1,17 @@
 <?php
 
-
+   /**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="Your API Title",
+ *      description="Your API Description",
+ *      @OA\Contact(
+ *           email="zakarialoulida92@gmail.com",
+ *          name="Zakaria loulida"
+ *      )
+ *  
+ * )
+ */
 // app/Http/Controllers/ItineraryController.php
 
 namespace App\Http\Controllers;
@@ -15,14 +26,80 @@ use Illuminate\Validation\Rules\Exists;
 
 class ItineraryController extends Controller
 {
+/**
+ * @OA\Get(
+ *     path="/api/itineraries/all",
+ *     summary="Retrieve a list of itineraries",
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of itineraries retrieved successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="itineraries", type="array", @OA\Items(type="object"))
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthenticated",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Unauthorized")
+ *         )
+ *     )
+ * )
+ */
 
-
-  
 
     public function index (){
         
+
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         return Itinerary::all();
     }
+
+/**
+ * @OA\Post(
+ *     path="/api/itineraries",
+ *     operationId="storeItinerary",
+ *     tags={"Itineraries"},
+ *     summary="Create a new itinerary",
+ *     description="Create a new itinerary with destinations",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"title", "category_id", "duration", "image", "destinations"},
+ *             @OA\Property(property="title", type="string"),
+ *             @OA\Property(property="category_id", type="integer"),
+ *             @OA\Property(property="duration", type="integer"),
+ *             @OA\Property(property="image", type="string"),
+ *             @OA\Property(
+ *                 property="destinations",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     @OA\Property(property="name", type="string"),
+ *                     @OA\Property(property="accommodation", type="string"),
+ *                     @OA\Property(property="places_to_visit", type="string"),
+ *                     @OA\Property(
+ *                         property="activities",
+ *                         type="array",
+ *                         @OA\Items(type="string")
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Itinerary created successfully"
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation error"
+ *     ),
+ *     security={{"bearerAuth": {}}}
+ * )
+ */
 
 
     public function store(Request $request)
@@ -78,6 +155,7 @@ class ItineraryController extends Controller
         return response()->json(['itinerary' => $itinerary], 200);
     }
     
+
     public function update(Request $request, Itinerary $itinerary)
     {
         if (Gate::denies('update', $itinerary)) {
@@ -105,6 +183,15 @@ class ItineraryController extends Controller
         // Return a response
         return response()->json(['message' => 'Itinerary updated successfully'], 200);
     }
+
+
+
+
+
+
+
+
+
     public function addToItinerariesToVisit( Itinerary $itinerary)
     {
        
@@ -117,6 +204,7 @@ class ItineraryController extends Controller
 
         return response()->json(['message' => 'Itinerary is already in itineraries to visit'], 422);
     }
+
 
     public function search(Request $request)
     {
