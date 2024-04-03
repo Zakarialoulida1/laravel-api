@@ -18,26 +18,24 @@ use App\Http\Controllers\UserAuthController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('/itineraries/search', [ItineraryController::class, 'search']);
 
 Route::group(['middleware'=> ['auth:sanctum']],function(){
+  Route::get('/itineraries',[ItineraryController::class, 'index']);
+ 
   Route::post('/itineraries/{itinerary}/destinations', [DestinationController::class, 'addDestinations']);
   Route::get('/users/me/itineraries/{itinerary}', [ItineraryController::class, 'addToItinerariesToVisit']);
   
   Route::post('/itineraries', [ItineraryController::class, 'store']);
-  Route::get('/itineraries',[ItineraryController::class, 'index']);
-
- 
-    Route::get('/itineraries/{itinerary}/edit', [ItineraryController::class, 'edit']);
-    Route::put('/itineraries/{itinerary}', [ItineraryController::class, 'update']);
+  Route::get('/itineraries/{itinerary}/edit', [ItineraryController::class, 'edit']);
+  Route::put('/itineraries/{itinerary}', [ItineraryController::class, 'update']);
+  Route::post('logout',[UserAuthController::class,'logout']);
 });
 
 
-Route::get('/itineraries/search', [ItineraryController::class, 'search']);
-   
 Route::post('register',[UserAuthController::class,'register']);
 Route::post('login',[UserAuthController::class,'login']);
-Route::post('logout',[UserAuthController::class,'logout'])
-  ->middleware('auth:sanctum');
+
 
   
  

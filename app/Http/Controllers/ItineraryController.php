@@ -52,9 +52,9 @@ class ItineraryController extends Controller
     public function index (){
         
 
-        if (!auth()->check()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
+        // if (!auth()->check()) {
+        //     return response()->json(['message' => 'Unauthorized'], 401);
+        // }
         return Itinerary::all();
     }
 
@@ -230,4 +230,17 @@ class ItineraryController extends Controller
 
         return response()->json(['itineraries' => $itineraries], 200);
     }
+
+    public function destroy(Itinerary $itinerary)
+{
+    if (Gate::denies('delete', $itinerary)) {
+        return response()->json(['message' => 'You are not authorized to delete this itinerary'], 403);
+    }
+
+    // Delete the itinerary
+    $itinerary->delete();
+
+    return response()->json(['message' => 'Itinerary deleted successfully'], 200);
+}
+
 }
