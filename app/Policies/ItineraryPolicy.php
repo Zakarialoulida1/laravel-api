@@ -46,8 +46,7 @@ class ItineraryPolicy
      */
     public function delete(User $user, Itinerary $itinerary): bool
     {
-        //
-    }
+  }
 
     /**
      * Determine whether the user can restore the model.
