@@ -22,7 +22,9 @@ use App\Models\Itinerary;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Exists;
+use Illuminate\Support\Str;
 
 class ItineraryController extends Controller
 {
@@ -102,50 +104,59 @@ class ItineraryController extends Controller
  */
 
 
-    public function store(Request $request)
-    {
-      $request->validate([
-            'title' => 'required|string',
-            'category_id' => 'required|integer',
-            'duration' => 'required|integer',
-            'image' => 'required|string',
-            'destinations' => 'required|array|min:2',
-            'destinations.*.name' => 'required|string',
-            'destinations.*.accommodation' => 'required|string',
-            'destinations.*.places_to_visit' => 'required|string',
-            'destinations.*.activities' => 'required|array',
-        ]);
-    
-        try {
-            // Create the itinerary
-            $itinerary = Itinerary::create([
-                'user_id' => Auth::id(), // Assuming user is authenticated
-                'title' => $request->title,
-                'category_id' => $request->category_id,
-                'duration' => $request->duration,
-                'image' => $request->image,
-            ]);
-    
-            // Iterate through each destination
-            foreach ($request->destinations as $destinationData) {
-                // Join activities array with comma separator
-                $activities = implode(', ', $destinationData['activities']);
-    
-                // Create destination with activities as comma-separated string
-                $destination = $itinerary->destinations()->create([
-                    'name' => $destinationData['name'],
-                    'accommodation' => $destinationData['accommodation'],
-                    'places_to_visit' => $destinationData['places_to_visit'],
-                    'activities' => $activities,
-                ]);
-            }
-    
-            return response()->json(['message' => 'Itinerary created successfully'], 201);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to create itinerary'], 500);
-        }
-    }
+ public function store(Request $request)
+ {
 
+    
+         $request->validate([
+         'title' => 'required|string',
+         'category_id' => 'required|integer',
+         'duration' => 'required|integer',
+         'image' => 'required|mimes:jpeg,png,jpg,gif', // Ensure the image is a valid file type
+         'destinations' => 'required|array|min:2',
+         'destinations.*.name' => 'required|string',
+         'destinations.*.accommodation' => 'required|string',
+         'destinations.*.places_to_visit' => 'required|string',
+         'destinations.*.activities' => 'required|array',
+     ]);
+
+   
+     try {
+         // Handle file upload
+        //  $imagePath = $request->file('image')->store('images');
+         $imagePath = Str::random(32).".".$request->image->getClientOriginalExtension();
+        
+ 
+         // Create the itinerary
+         $itinerary = Itinerary::create([
+             'user_id' => Auth::id(), // Assuming user is authenticated
+             'title' => $request->title,
+             'category_id' => $request->category_id,
+             'duration' => $request->duration,
+             'image' => $imagePath, // Store the image path
+         ]);
+         Storage::disk('public')->put($imagePath,file_get_contents($request->image));
+ 
+         // Iterate through each destination
+         foreach ($request->destinations as $destinationData) {
+             // Join activities array with comma separator
+             $activities = implode(', ', $destinationData['activities']);
+ 
+             // Create destination with activities as comma-separated string
+             $destination = $itinerary->destinations()->create([
+                 'name' => $destinationData['name'],
+                 'accommodation' => $destinationData['accommodation'],
+                 'places_to_visit' => $destinationData['places_to_visit'],
+                 'activities' => $activities,
+             ]);
+         }
+ 
+         return response()->json(['message' => 'Itinerary created successfully'], 201);
+     } catch (\Exception $e) {
+         return response()->json(['message' => 'Failed to create itinerary'], 500);
+     }
+ }
+ 
     public function edit(Itinerary $itinerary)
     {
         if (Gate::denies('update', $itinerary)) {
