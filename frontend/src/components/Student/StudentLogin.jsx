@@ -1,4 +1,4 @@
-"use client"
+
 
 import { z } from "zod"
 import { useForm } from "react-hook-form";
@@ -18,24 +18,24 @@ const formSchema = z.object({
 
 export default function StudentLogin() {
 
-const {login,setAuthenticated} =useUserContext()
+    const { login, setAuthenticated } = useUserContext()
 
     const Navigate = useNavigate();
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: "test@example.com",
-            password: "123456789",
+            email: "zakariaay13@gmail.com",
+            password: "12345678",
         },
 
     })
     const { setError, formState: { isSubmitting } } = form
     // 2. Define a submit handler.
     const onSubmit = async values => {
-        
-       await  login(values.email,values.password).then((value) => {
-         if (value.status === 200) {
+
+        await login(values.email, values.password).then((value) => {
+            if (value.status === 200) {
                 const token = value.data.access_token;
                 localStorage.setItem('token', token);
                 setAuthenticated(true)
@@ -59,7 +59,7 @@ const {login,setAuthenticated} =useUserContext()
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
                     name="email"
@@ -93,10 +93,10 @@ const {login,setAuthenticated} =useUserContext()
                     )}
                 />
                 <Button disabled={isSubmitting} type="submit">
-                    {isSubmitting && <Loader2 className ={'mx-2 my-2 animate-spin'}/>}
+                    {isSubmitting && <Loader2 className={'mx-2 my-2 animate-spin'} />}
                     Submit
-                    
-                    </Button>
+
+                </Button>
             </form>
         </Form>
     )

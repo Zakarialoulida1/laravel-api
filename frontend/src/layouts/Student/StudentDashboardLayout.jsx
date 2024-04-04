@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LOGIN_ROUTE, STUDENT_DASHBOARD_ROUTE } from '../router';
-import { axiosClient } from '../api/axios';
-import { useUserContext } from '../context/UserContext';
-import StudentApi from '../services/Api/Student/StudentApi';
-import { Button } from '../components/ui/button';
+import { LOGIN_ROUTE, STUDENT_DASHBOARD_ROUTE } from '../../router';
+
+import { useUserContext } from '../../context/UserContext';
+import StudentApi from '../../services/Api/Student/StudentApi';
+import { Button } from '../../components/ui/button';
+import StudentDropDownMenu from './StudentDropDownMenu';
+
+
+
 
 export default function StudentDashboardLayout() {
     const navigate = useNavigate();
@@ -23,12 +27,7 @@ export default function StudentDashboardLayout() {
             });
     }, []);
 
-   
-    const logout = async ()=>{
-        StudentApi.logout().then(()=>{
-            ContextLogout();
-            navigate(LOGIN_ROUTE)
-        })}
+ 
 
     
     return <>
@@ -44,9 +43,9 @@ export default function StudentDashboardLayout() {
                         <ul className="flex font-semibold justify-between">
 
                             <li className="md:px-4 md:py-2 text-[#EF4A81]">
-                                <Link to={'/'}>Dashboard</Link>
+                                <Link to={STUDENT_DASHBOARD_ROUTE}>Dashboard</Link>
                             </li>
-                            <li className="md:px-4 md:py-2 hover:text-[#ffb703]">  <Link to={STUDENT_DASHBOARD_ROUTE}>Iteneraries</Link></li>
+                            <li className="md:px-4 md:py-2 hover:text-[#ffb703]">  <Link to={'/IteneraryForm'} >Create Itenerary</Link></li>
                             <li className="md:px-4 md:py-2 hover:text-[#ffb703]"><Link to={'/users'}>Students</Link></li>
                             {/* <li className="md:px-4 md:py-2 hover:text-[#ffb703]"><a href="#">ADD a Course</a></li>
                             <li className="md:px-4 md:py-2 hover:text-[#ffb703]"><a href="{{ route('matieres') }}">ADD a Subject </a>
@@ -97,11 +96,11 @@ export default function StudentDashboardLayout() {
 
                          <Link className="text-white mx-2 p-2 bg-[#000000] hover:bg-[#343434]  hover:border hover:border-[#ffffff] rounded dark:text-gray-400  focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" to={'/login'} >Log in </Link>
 
+                         <Link className="text-white mx-2 p-2 bg-[#000000] hover:bg-[#343434]  hover:border hover:border-[#ffffff] rounded dark:text-gray-400  focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" to={'/register'} >Register </Link>
 
 
 
-                        <Button onClick={logout} >Log out</Button>
- 
+                      <StudentDropDownMenu/>
 
 
 
