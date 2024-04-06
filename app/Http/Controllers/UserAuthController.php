@@ -42,21 +42,27 @@ class UserAuthController extends Controller
 
 
 
-    public function register(Request $request){
-        $registerUserData = $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|string|email|unique:users',
-            'password'=>'required|min:8'
-        ]);
-        $user = User::create([
-            'name' => $registerUserData['name'],
-            'email' => $registerUserData['email'],
-            'password' => Hash::make($registerUserData['password']),
-        ]);
-        return response()->json([
-            'message' => 'User Created ',
-        ]);
-    }
+ public function register(Request $request){
+    $registerUserData = $request->validate([
+        'name'=>'required|string',
+        'email'=>'required|string|email|unique:users',
+        'password'=>'required|min:8'
+    ]);
+    
+    $user = User::create([
+        'name' => $registerUserData['name'],
+        'email' => $registerUserData['email'],
+        'password' => Hash::make($registerUserData['password']),
+    ]);
+    
+    // Generate token for the user
+    $token = $user->createToken($user->name.'-AuthToken')->plainTextToken;
+    
+    return response()->json([
+        'message' => 'User Created',
+        'access_token' => $token, // Return the token along with the response
+    ]);
+}
 
 /**
  * @OA\Post(

@@ -38,7 +38,7 @@ export default function StudentLogin() {
             if (value.status === 200) {
                 const token = value.data.access_token;
                 localStorage.setItem('token', token);
-                setAuthenticated(true)
+                setAuthenticated(true)  // window.localStorage.setItem('Authenticated',isAuthenticated)
                 Navigate(STUDENT_DASHBOARD_ROUTE)
             }
         }).catch(
@@ -86,7 +86,7 @@ export default function StudentLogin() {
                                 <Input type={'password'} placeholder="Password" {...field} />
                             </FormControl>
                             <FormDescription>
-                                .
+                                
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

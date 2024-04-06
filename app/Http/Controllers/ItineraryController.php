@@ -136,7 +136,7 @@ class ItineraryController extends Controller
              'image' => $imagePath, // Store the image path
          ]);
          Storage::disk('public')->put($imagePath,file_get_contents($request->image));
- 
+  echo Storage::disk('public')->url($imagePath);
          // Iterate through each destination
          foreach ($request->destinations as $destinationData) {
              // Join activities array with comma separator
@@ -173,7 +173,6 @@ class ItineraryController extends Controller
             return response()->json(['message' => 'You are not authorized to update this itinerary'], 403);
         }
 
-        // Validate request data
         $request->validate([
             'title' => 'required|string',
             'category_id' => 'required|integer',

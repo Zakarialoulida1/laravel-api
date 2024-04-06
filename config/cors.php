@@ -14,7 +14,7 @@ return [
     | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
     */
-    'paths' => ['user','api/*', 'sanctum/csrf-cookie'],   //we specefied our endpoints that we have 
+    'paths' => ['*'],   //we specefied our endpoints that we have 
 
     'allowed_methods' => ['*'],        // which type of requests are allowed ( get post are allways allowed) if i {add [put ,patch] the delete will gonna be denied  }put ,patch,delete ...
 

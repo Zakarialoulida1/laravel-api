@@ -111,20 +111,7 @@ export default function StudentDashboardLayout() {
             </nav >
         </header >
        
-        <main className="container mx-auto">
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Itinerary.map(itinerary => (
-                    <div key={itinerary.id} className="bg-white shadow rounded-lg p-4">
-                        <img src={`data:image/jpeg;base64,${itinerary.image}`} alt={itinerary.title} className="w-full h-32 object-cover mb-2" />
-                        <h2 className="text-lg font-semibold">{itinerary.title}</h2>
-                        <p className="text-sm text-gray-500 mb-2">{itinerary.duration} days</p>
-                        {/* Add more details as needed */}
-                        <Link to={`/itinerary/${itinerary.id}`} className="text-blue-500 hover:underline">View Details</Link>
-                    </div>
-                ))}
-            </div>
-        </main>
+       
         <Outlet />
         <footer> Footer</footer>
 
