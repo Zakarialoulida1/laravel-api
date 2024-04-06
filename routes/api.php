@@ -33,6 +33,8 @@ Route::group(['middleware'=> ['auth:sanctum']],function(){
   Route::post('/itineraries', [ItineraryController::class, 'store']);
   Route::get('/itineraries/{itinerary}/edit', [ItineraryController::class, 'edit']);
   Route::put('/itineraries/{itinerary}', [ItineraryController::class, 'update']);
+
+  Route::delete('/itineraries/{itinerary}', [ItineraryController::class, 'destroy']);
   Route::post('logout',[UserAuthController::class,'logout']);
 });
 
