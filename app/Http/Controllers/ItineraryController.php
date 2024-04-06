@@ -16,6 +16,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ItineraryRequest;
 use App\Models\Destination;
 use Illuminate\Http\Request;
 use App\Models\Itinerary;
@@ -136,7 +137,7 @@ class ItineraryController extends Controller
              'image' => $imagePath, // Store the image path
          ]);
          Storage::disk('public')->put($imagePath,file_get_contents($request->image));
-  echo Storage::disk('public')->url($imagePath);
+  
          // Iterate through each destination
          foreach ($request->destinations as $destinationData) {
              // Join activities array with comma separator
@@ -167,32 +168,66 @@ class ItineraryController extends Controller
     }
     
 
-    public function update(Request $request, Itinerary $itinerary)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function update(ItineraryRequest $request, Itinerary $itinerary)
     {
-        if (Gate::denies('update', $itinerary)) {
+     
+      
+            
+    if (Gate::denies('update', $itinerary)) {
             return response()->json(['message' => 'You are not authorized to update this itinerary'], 403);
         }
+        
+        try {
 
-        $request->validate([
-            'title' => 'required|string',
-            'category_id' => 'required|integer',
-            'duration' => 'required|integer',
-            'image' => 'required|string',
-            // Add validation rules for other fields as needed
-        ]);
-
-        // Update the itinerary
-        $itinerary->update([
-            'title' => $request->title,
-            'category_id' => $request->category_id,
-            'duration' => $request->duration,
-            'image' => $request->image,
-            // Add other fields here
-        ]);
-
-        // Return a response
-        return response()->json(['message' => 'Itinerary updated successfully'], 200);
+            $itinerary->title = $request->title;
+            $itinerary->duration = $request->duration;
+            $itinerary->category_id = $request->category_id;
+      
+       
+            if($request->image) {
+ 
+                // Public storage
+                $storage = Storage::disk('public');
+      
+                // Old iamge delete
+                if($storage->exists($itinerary->image))
+                    $storage->delete($itinerary->image);
+      
+                
+                $imageName = Str::random(32).".".$request->image->getClientOriginalExtension();
+                $itinerary->image = $imageName;
+               
+                // Image save in public folder
+                $storage->put($imageName, file_get_contents($request->image));
+            }
+          
+            // Update Product
+            $itinerary->save();
+      
+            // Return Json Response
+          
+        
+        } catch (\Exception $e) {
+            // Return Json Response
+            return response()->json([
+                'message' => "Something went really wrong!"
+            ],500);
+        }
     }
+   
 
 
 
