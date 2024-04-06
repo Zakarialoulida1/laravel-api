@@ -46,6 +46,8 @@ class ItineraryPolicy
      */
     public function delete(User $user, Itinerary $itinerary): bool
     {
+
+        return $user->id === $itinerary->user_id;
   }
 
     /**
