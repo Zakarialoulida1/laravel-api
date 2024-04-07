@@ -70,7 +70,7 @@ export default function Layout() {
         <main className={'container'}>
             <Outlet  />
         </main>
-        <footer> Footer</footer>
+        
 
     </>
 }
