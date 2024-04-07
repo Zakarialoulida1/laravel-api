@@ -11,11 +11,13 @@ import StudentDashboardLayout from "../layouts/Student/StudentDashboardLayout.js
 import CreateItineraryForm from "../components/Itenerary/CreateItenerary.jsx";
 import Iteneraries from "../components/Itenerary/Iteneraries.jsx";
 import UpdateItenerary from "../components/Itenerary/UpdateItenerary.jsx";
+import AddDestinationModal from "../components/Destination/AddDestinationModal.jsx";
 
 export const LOGIN_ROUTE = '/login';
 export const REGISTER_ROUTE = '/register';
 export const STUDENT_DASHBOARD_ROUTE = '/Itineraries';
 export const ROUTE_UPDATE_ITINERARY = '/update-itinerary/:id'; // Define the route for updating itinerary
+export const ROUTE_ADD_DESTINATION_TO_ITINERARY='/itineraries/:id/destinations'
 
 export const router = createBrowserRouter([
   {
@@ -67,7 +69,12 @@ export const router = createBrowserRouter([
       {
         path: ROUTE_UPDATE_ITINERARY,
         element: <UpdateItenerary />
-      }
+      },
+      {
+        path: ROUTE_ADD_DESTINATION_TO_ITINERARY,
+        element: <AddDestinationModal/>
+      },
+
     ]
   }
 ]);
