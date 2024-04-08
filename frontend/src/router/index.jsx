@@ -51,16 +51,15 @@ export const router = createBrowserRouter([
       {
         path: REGISTER_ROUTE,
         element: <Register />
-      }
+      },
+  
+      
     ]
   },
   {
     element: <StudentDashboardLayout />,
     children: [
-      {
-        path: STUDENT_DASHBOARD_ROUTE,
-        element: <Iteneraries />
-      },
+ 
       {
         path: '/IteneraryForm',
         element: <CreateItineraryForm />
@@ -73,6 +72,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTE_ADD_DESTINATION_TO_ITINERARY,
         element: <AddDestinationModal/>
+      },
+      {
+        path: STUDENT_DASHBOARD_ROUTE,
+        element: <Iteneraries />
       },
 
     ]
